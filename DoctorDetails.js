@@ -3,6 +3,7 @@ import "./DoctorDetails.css";
 
 function DoctorDetails({ doctor, onApprove, onReject, onUploadDocuments }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [messageText, setMessageText] = useState("");
 
   if (!doctor) {
     return (
@@ -29,6 +30,15 @@ function DoctorDetails({ doctor, onApprove, onReject, onUploadDocuments }) {
     onUploadDocuments(doctor.id, documents);
     setSelectedFiles([]);
     document.getElementById("fileInput").value = "";
+  };
+
+  const handleSendMessage = () => {
+    if (messageText.trim() === "") {
+      alert("Veuillez écrire un message");
+      return;
+    }
+    alert(`Message envoyé à ${doctor.name}: "${messageText}"`);
+    setMessageText("");
   };
 
   return (
@@ -78,30 +88,17 @@ function DoctorDetails({ doctor, onApprove, onReject, onUploadDocuments }) {
         <hr />
 
         <div className="upload-section">
-          <label className="upload-label">📎 Déposer des documents justificatifs</label>
-          <input
-            id="fileInput"
-            type="file"
-            multiple
-            onChange={handleFileChange}
-            className="file-input"
-            accept=".pdf,.jpg,.png,.jpeg"
+          <label className="upload-label">✉️ Envoyer un message au médecin</label>
+          <textarea
+            value={messageText}
+            onChange={(e) => setMessageText(e.target.value)}
+            className="message-textarea"
+            placeholder="Écrivez votre message ici..."
+            rows="5"
           />
-          <button className="btn-submit" onClick={handleUpload}>
-            Envoyer les documents
+          <button className="btn-submit" onClick={handleSendMessage}>
+            Envoyer le message
           </button>
-          
-          {doctor.documents && doctor.documents.length > 0 && (
-            <div className="uploaded-docs">
-              <div className="section-title">Documents déposés</div>
-              {doctor.documents.map((doc, idx) => (
-                <div key={idx} className="doc-item">
-                  📄 {doc.name}
-                  <span className="doc-status">✓ déposé</span>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
 
         <div className="action-buttons">

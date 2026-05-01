@@ -102,6 +102,39 @@ function AdminDashboard() {
         "Master en Thérapies Cognitives"
       ],
       documents: []
+    },
+    {
+      id: 6,
+      name: "Dr. Jean Dupont",
+      specialty: "Orthopédie",
+      rpps: "RPPS 10078901234",
+      experience: "7 ans",
+      submission: "06/04/2026",
+      submissionFull: "6 avril 2026",
+      status: "Rejeté",
+      email: "jean.dupont@medical.fr",
+      phone: "+33 6 67 89 01 23",
+      diplomas: [
+        "Diplôme de médecine - Université Lille",
+        "Spécialisation Orthopédie"
+      ],
+      documents: []
+    },
+    {
+      id: 7,
+      name: "Dr. Sylvie Moreau",
+      specialty: "Ophtalmologie",
+      rpps: "RPPS 10089012345",
+      experience: "5 ans",
+      submission: "07/04/2026",
+      submissionFull: "7 avril 2026",
+      status: "Rejeté",
+      email: "sylvie.moreau@medical.fr",
+      phone: "+33 6 78 90 12 34",
+      diplomas: [
+        "Diplôme de médecine - Université Toulouse"
+      ],
+      documents: []
     }
   ];
 
@@ -120,6 +153,8 @@ function AdminDashboard() {
       filtered = filtered.filter(d => d.status === "En attente");
     } else if (currentFilter === "approved") {
       filtered = filtered.filter(d => d.status === "Approuvé");
+    } else if (currentFilter === "rejected") {
+      filtered = filtered.filter(d => d.status === "Rejeté");
     }
     
     if (searchQuery.trim() !== "") {
@@ -171,8 +206,9 @@ function AdminDashboard() {
   const getStats = () => {
     const pending = doctors.filter(d => d.status === "En attente").length;
     const approved = doctors.filter(d => d.status === "Approuvé").length;
+    const rejected = doctors.filter(d => d.status === "Rejeté").length;
     const total = doctors.length;
-    return { pending, approved, total };
+    return { pending, approved, rejected, total };
   };
 
   const stats = getStats();
@@ -182,8 +218,19 @@ function AdminDashboard() {
       {/* Header avec logo */}
       <div className="main-header">
         <div className="logo-area">
-          <div className="logo-circle">M</div>
-          <div className="logo-text">Medi<span>ko</span></div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+  {/* Le logo chargé depuis le dossier public */}
+  <img 
+    src="/rimas.png" 
+    alt="Logo Mediko" 
+    style={{ width: '150px', height: 'auto' }} 
+  />
+  
+  {/* Le nom de l'application */}
+  <div className="logo-text">
+    <span></span>
+  </div>
+</div>
         </div>
         <div className="header-right">
           <div className="admin-badge">👨‍⚕️ Administration</div>
@@ -204,6 +251,10 @@ function AdminDashboard() {
         <div className="stat-card">
           <p>Approuvés</p>
           <span className="stat-number">{stats.approved}</span>
+        </div>
+        <div className="stat-card">
+          <p>Rejetés</p>
+          <span className="stat-number">{stats.rejected}</span>
         </div>
         <div className="stat-card">
           <p>Total médecins</p>
@@ -241,6 +292,12 @@ function AdminDashboard() {
           onClick={() => setCurrentFilter("approved")}
         >
           Approuvés
+        </button>
+        <button
+          className={`filter-btn ${currentFilter === "rejected" ? "active" : ""}`}
+          onClick={() => setCurrentFilter("rejected")}
+        >
+          Rejetés
         </button>
       </div>
 
